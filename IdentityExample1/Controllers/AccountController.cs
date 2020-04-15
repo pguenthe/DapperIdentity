@@ -9,11 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
-using IdentityExample1.Entities;
 using Identity.Dapper.Entities;
 
 namespace IdentityExample1.Controllers
 {
+    //annotation means the default is you must be logged in to run an action
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly UserManager<DapperIdentityUser> _userManager;
@@ -35,6 +36,7 @@ namespace IdentityExample1.Controllers
         // GET: /Account/Login
         [HttpGet]
         [AllowAnonymous]
+        //AllowAnonymous means you can access this without being logged in
         public IActionResult Login(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;

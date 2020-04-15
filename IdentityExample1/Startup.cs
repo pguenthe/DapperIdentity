@@ -7,8 +7,11 @@ using Identity.Dapper.Entities;
 using Identity.Dapper.Models;
 using Identity.Dapper.SqlServer.Connections;
 using Identity.Dapper.SqlServer.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -37,6 +40,23 @@ namespace IdentityExample1
                 .AddDapperIdentityFor<SqlServerConfiguration>()
                 .AddDefaultTokenProviders();
 
+            //need this for Authorize to work!!
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+              .AddCookie(options =>
+              {
+                  options.Cookie.HttpOnly = true;
+                  options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                  options.Cookie.SameSite = SameSiteMode.Lax;
+              });
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.MinimumSameSitePolicy = SameSiteMode.Strict;
+                options.HttpOnly = HttpOnlyPolicy.None;
+                options.Secure = CookieSecurePolicy.SameAsRequest;
+            });
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
@@ -61,7 +81,10 @@ namespace IdentityExample1
 
             app.UseAuthorization();
 
+            //add this to access user info in Views
             app.UseAuthentication();
+
+            app.UseCookiePolicy();
 
             app.UseEndpoints(endpoints =>
             {

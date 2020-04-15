@@ -1,0 +1,15 @@
+﻿@model Info
+@{
+    ViewData["Title"] = "AddInfo";
+}
+
+<h1>Add Info</h1>
+@ViewData["Name"], please enter your info:
+<form asp-controller="Info" asp-action="AddInfo" method="post">
+    <p>Favorite color: <input type="text" name="color" /></p>
+    <p>Favorite song: <input type="text" name="song" /></p>
+    <p>Favorite movie: <input type="text" name="movie" /></p>
+    @*<input type="hidden" name="UserId" value="@ViewData["UID"]" />*@
+    <p><input type="submit" value="Submit Info" /></p>
+</form>
+
