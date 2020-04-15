@@ -40,8 +40,6 @@ namespace IdentityExample1
                 .AddDapperIdentityFor<SqlServerConfiguration>()
                 .AddDefaultTokenProviders();
 
-            //need this for Authorize to work!!
-
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
               .AddCookie(options =>
               {
@@ -52,9 +50,9 @@ namespace IdentityExample1
 
             services.Configure<CookiePolicyOptions>(options =>
             {
-                options.MinimumSameSitePolicy = SameSiteMode.Strict;
-                options.HttpOnly = HttpOnlyPolicy.None;
-                options.Secure = CookieSecurePolicy.SameAsRequest;
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
             services.AddControllersWithViews();
@@ -79,10 +77,11 @@ namespace IdentityExample1
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
             //add this to access user info in Views
             app.UseAuthentication();
+
+            //use this to use [Authorize] attributes
+            app.UseAuthorization();
 
             app.UseCookiePolicy();
 

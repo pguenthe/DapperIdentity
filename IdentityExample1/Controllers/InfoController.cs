@@ -32,6 +32,7 @@ namespace IdentityExample1.Controllers
             _logger = loggerFactory.CreateLogger<AccountController>();
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             ViewData["Name"] = User.Identity.Name;
