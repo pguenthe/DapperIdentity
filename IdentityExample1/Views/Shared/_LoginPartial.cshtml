@@ -1,0 +1,27 @@
+﻿@using Identity.Dapper.Entities
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<DapperIdentityUser> SignInManager
+@inject UserManager<DapperIdentityUser> UserManager
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <form asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a class="nav-link text-dark" href="#">Hello @UserManager.GetUserName(User)!</a>
+            </li>
+            <li>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link">Log off</button>
+            </li>
+        </ul>
+    </form>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li><a asp-controller="Account" asp-action="Register" class="nav-link text-dark">Register</a></li>
+        <li><a asp-controller="Account" asp-action="Login" class="nav-link text-dark">Log in</a></li>
+    </ul>
+}
